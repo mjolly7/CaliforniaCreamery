@@ -3,6 +3,7 @@ public with sharing class StoreTableController {
     
     @AuraEnabled(cacheable=true)
     public static String fetchTableInfo(){
+        System.debug('Fethinc!!!!!!!!!!!!');
         try {
             List<Store__c> stores = [
                     SELECT 
@@ -44,17 +45,19 @@ public with sharing class StoreTableController {
     }
 
     public class StoreWrapper {
+        public String Id;
         public String Name;
         public String City;
         public String State;
-        public Decimal Amount;
+        public Decimal Amount;        
 
         public StoreWrapper(Store__c store) {
+            Id = store.Id;
             Name = store.Name;
             City = store.City__c;
             State = store.State__c;
             Amount = 0;
-            
+
             if(!store.Opportunities__r.isEmpty()) {
                 for(Opportunity opp :store.Opportunities__r) {
                     if(opp.Amount != null) {
