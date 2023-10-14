@@ -1,7 +1,7 @@
 //Created by Matt Jolly - 10/12/2023
 public with sharing class StoreTableController {    
     
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static String fetchTableInfo(){
         try {
             List<Store__c> stores = [
@@ -14,13 +14,16 @@ public with sharing class StoreTableController {
                     FROM Store__c 
                     ORDER BY Name ASC
                     LIMIT 9999];
+
             if(!stores.isEmpty()) {
                 GeographicInformation geoInfo = new GeographicInformation();
                 List<StoreWrapper> storeWrappers = new List<StoreWrapper>();
+                
                 for(Store__c store :stores) {
                     storeWrappers.add(new StoreWrapper(store));
                     geoInfo.addStoreInfo(store);
                 }
+                
                 return JSON.serialize(new TableWrapper(storeWrappers,geoInfo));
             } else {
                 return null;
@@ -51,6 +54,7 @@ public with sharing class StoreTableController {
             City = store.City__c;
             State = store.State__c;
             Amount = 0;
+            
             if(!store.Opportunities__r.isEmpty()) {
                 for(Opportunity opp :store.Opportunities__r) {
                     if(opp.Amount != null) {
