@@ -1,3 +1,38 @@
 <template>
-    
+    <table>
+        <thead>
+            <template for:each={columns} for:item="col">
+                <th key={col.name} class="slds-p-around_x-small">
+                    <a onclick={sortColumn} data-type={col.name}>{col.name}</a>
+                    <template if:true={col.isSortedAsc}>
+                        <span class="slds-p-left_large">
+                            <lightning-icon icon-name="utility:chevronup" size="xx-small"></lightning-icon>
+                        </span>
+                    </template>
+                    <template if:true={col.isSortedDesc}>
+                        <span class="slds-p-left_large">
+                            <lightning-icon icon-name="utility:chevrondown" size="xx-small"></lightning-icon>
+                        </span>
+                    </template>                    
+                </th>                
+            </template>            
+        </thead>
+        <tbody>
+            <template for:each={sortedRows} for:item="row">
+                <tr key={row.Id}>
+                    <td class="slds-p-around_x-small"><a href={row.url} target="_blank">{row.Name}</a></td>
+                    <template for:each={row.fieldValues} for:item="fld">
+                        <td key={fld.Name} class="slds-p-around_x-small">
+                            <template if:false={fld.isCurrency}>
+                                {fld.value}
+                            </template>
+                            <template if:true={fld.isCurrency}>
+                                <lightning-formatted-number value={fld.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </template>                                
+                        </td>
+                    </template>
+                </tr>
+            </template>
+        </tbody>
+    </table>
 </template>

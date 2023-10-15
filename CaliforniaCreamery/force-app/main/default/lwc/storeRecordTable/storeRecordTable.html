@@ -1,39 +1,39 @@
 <template>
     <lightning-card class="slds-p-around_x-small" title="Stores">
-        <div class="slds-p-left_x-small">
-            <div class="slds-p-bottom_xx-small">
-                <label for="cities">Please Select a City</label>
-            </div>
-            <select name="cities"  onchange={handleCityChange}>
-                <option value="-">- All Cities -</option>
-                <template for:each={cities} for:item="city">
-                    <option key={city} value={city}>{city}</option>
-                </template>
-            </select>
-        </div>
-        
-        <table>
-            <thead>
-                <th class="slds-p-around_x-small"><a onclick={sortColumn} data-type="Name">Name</a></th>
-                <th class="slds-p-around_x-small">City</th>
-                <th class="slds-p-around_x-small">State</th>
-                <th class="slds-p-around_x-small">Amount</th>                    
-            </thead>
-            <tbody>
-                <template for:each={filteredStores} for:item="store">
-                    <tr key={store.Id}>
-                        <td class="slds-p-around_x-small"><a href={store.url} target="_blank">{store.Name}</a></td>
-                        <td class="slds-p-around_x-small">{store.City}</td>
-                        <td class="slds-p-around_x-small">{store.State}</td>
-                        <td class="slds-p-around_x-small">
-                            <lightning-formatted-number value={store.Amount} format-style="currency" currency-code="USD"></lightning-formatted-number>
-                        </td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
 
-        <template if:true={showTotalAmount}><p slot="footer">Total Amount for {selectedCity}: {totalAmount}</p></template>
+        <template if:false={isLoading}>
+            <template if:true={tableHasData}>
+                <div class="slds-p-left_medium slds-p-bottom_medium">
+                    <div class="slds-p-bottom_xx-small">
+                        <label for="cities">Please Select a City</label>
+                    </div>
+                    <select name="cities"  onchange={handleCityChange}>
+                        <option value="-">- All Cities -</option>
+                        <template for:each={cities} for:item="city">
+                            <option key={city} value={city}>{city}</option>
+                        </template>
+                    </select>
+                </div>
+                
+                <c-record-table rows={filteredStores} col-names={colNames}></c-record-table>
+        
+                <template if:true={showTotalAmount}>
+                    <p slot="footer">
+                        Total Amount for {selectedCity}: 
+                        <lightning-formatted-number class="slds-p-left_small" value={totalAmount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                    </p>
+                </template>
+            </template>
+
+            <template if:false={tableHasData}>
+                <p class="slds-p-left_medium">No stores found.</p>
+            </template>           
+            
+        </template>
+        
         
     </lightning-card>
     
