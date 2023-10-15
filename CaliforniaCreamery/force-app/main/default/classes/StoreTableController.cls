@@ -20,7 +20,9 @@ public with sharing class StoreTableController {
                 List<StoreWrapper> storeWrappers = new List<StoreWrapper>();
                 
                 for(Store__c store :stores) {
+                    //Generate list of store wrappers
                     storeWrappers.add(new StoreWrapper(store));
+                    //Add city and state info 
                     geoInfo.addStoreInfo(store);
                 }
                 
@@ -57,6 +59,7 @@ public with sharing class StoreTableController {
             State = store.State__c;
             Amount = 0;
 
+            //Calculate sum of opportunity amounts for each store
             if(!store.Opportunities__r.isEmpty()) {
                 for(Opportunity opp :store.Opportunities__r) {
                     if(opp.Amount != null) {

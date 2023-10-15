@@ -54,13 +54,8 @@ export default class RecordTable extends LightningElement {
         
         //Add sorted column direction indicator
         this.columns.forEach(col => {
-            if(col.name == this.sortedField) {
-                col.isSortedAsc = this.sortDirection == 'asc';
-                col.isSortedDesc = this.sortDirection == 'desc';
-            } else {
-                col.isSortedAsc = false;
-                col.isSortedDesc = false;
-            }
+            col.isSortedAsc = col.name == this.sortedField && this.sortDirection == 'asc';
+            col.isSortedDesc = col.name == this.sortedField && this.sortDirection == 'desc';            
         });
     }
 }
