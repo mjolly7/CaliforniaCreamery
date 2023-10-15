@@ -1,3 +1,4 @@
+//Created by Matt Jolly - 10/14/2023
 import { LightningElement, api, track } from 'lwc';
 
 export default class RecordTable extends LightningElement {

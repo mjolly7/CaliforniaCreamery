@@ -1,11 +1,13 @@
 <template>
     <lightning-card class="slds-p-around_x-small" title="Stores">
+
         <template if:true={isLoading}>
             <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
         </template>
 
         <template if:false={isLoading}>
             <template if:true={tableHasData}>
+                
                 <div class="slds-p-left_medium slds-p-bottom_medium">
                     <div class="slds-p-bottom_xx-small">
                         <label for="cities">Please Select a City</label>
@@ -23,18 +25,19 @@
                 <template if:true={showTotalAmount}>
                     <p slot="footer">
                         Total Amount for {selectedCity}: 
-                        <lightning-formatted-number class="slds-p-left_small" value={totalAmount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                        <lightning-formatted-number 
+                                class="slds-p-left_small" 
+                                value={totalAmount} 
+                                format-style="currency" 
+                                currency-code="USD">
+                        </lightning-formatted-number>
                     </p>
                 </template>
             </template>
 
             <template if:false={tableHasData}>
                 <p class="slds-p-left_medium">No stores found.</p>
-            </template>           
-            
+            </template>
         </template>
-        
-        
     </lightning-card>
-    
 </template>

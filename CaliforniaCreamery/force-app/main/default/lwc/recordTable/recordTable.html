@@ -1,6 +1,7 @@
 <template>
     <table>
         <thead>
+
             <template for:each={columns} for:item="col">
                 <th key={col.name} class="slds-p-around_x-small">
                     <a onclick={sortColumn} data-type={col.name}>{col.name}</a>
@@ -15,9 +16,11 @@
                         </span>
                     </template>                    
                 </th>                
-            </template>            
+            </template> 
+
         </thead>
         <tbody>
+
             <template for:each={sortedRows} for:item="row">
                 <tr key={row.Id}>
                     <td class="slds-p-around_x-small"><a href={row.url} target="_blank">{row.Name}</a></td>
@@ -27,12 +30,17 @@
                                 {fld.value}
                             </template>
                             <template if:true={fld.isCurrency}>
-                                <lightning-formatted-number value={fld.value} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                <lightning-formatted-number 
+                                        value={fld.value} 
+                                        format-style="currency" 
+                                        currency-code="USD">
+                                </lightning-formatted-number>
                             </template>                                
                         </td>
                     </template>
                 </tr>
             </template>
+
         </tbody>
     </table>
 </template>

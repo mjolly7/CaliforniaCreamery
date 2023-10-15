@@ -3,7 +3,6 @@ public with sharing class StoreTableController {
     
     @AuraEnabled(cacheable=true)
     public static String fetchTableInfo(){
-        System.debug('Fethinc!!!!!!!!!!!!');
         try {
             List<Store__c> stores = [
                     SELECT 

@@ -1,9 +1,12 @@
+//Created by Matt Jolly - 10/14/2023
 import fetchTableInfo from '@salesforce/apex/StoreTableController.fetchTableInfo';
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { LightningElement, track } from 'lwc';
 
 export default class StoreRecordTable extends LightningElement {
     @track isLoading;
-    colNames = ['Name','City','State','Amount'];
+    @track tableHasData = false;
+    
     @track stores;
     @track filteredStores;    
     @track cities = [];
@@ -11,10 +14,8 @@ export default class StoreRecordTable extends LightningElement {
     
     @track totalAmount = 0;
     @track showTotalAmount = false;
-    @track tableHasData = false;
-
-
-   
+    
+    colNames = ['Name','City','State','Amount'];
 
     connectedCallback() {
         this.isLoading = true;
@@ -25,7 +26,6 @@ export default class StoreRecordTable extends LightningElement {
                 this.stores = dataWrapper.Stores;
                 this.tableHasData = dataWrapper.Stores.length > 0;
                 this.filteredStores = this.stores;
-
                 
                 //Convert the values to list of fields
                     //This supports iterating over the column values to support dynamic tables
@@ -41,11 +41,15 @@ export default class StoreRecordTable extends LightningElement {
                 dataWrapper.GeoInfo.Cities.forEach((cityName) => {
                     this.cities.push(cityName);                    
                 });
-                //this.cities.sort();
+                this.cities.sort();
             } else if(error) {
                 console.log('error::: ' + JSON.stringify(error));
-            } else {
-                console.log('no data');
+                const evt = new ShowToastEvent({
+                    title: "Error",
+                    message: "An error has occurred. Please contact your administrator.",
+                    variant: "error",
+                  });
+                  this.dispatchEvent(evt);
             }
             this.isLoading = false;
         });
@@ -60,7 +64,7 @@ export default class StoreRecordTable extends LightningElement {
             //Only show total amount when the city filter is applied
             this.showTotalAmount = true;
             this.filteredStores = this.stores.filter((store) => store.City == this.selectedCity);
-            this.totalAmount = this.filteredStores.reduce(function(accumulator,currentStore) {return accumulator + currentStore.Amount;},0);
+            this.totalAmount = this.filteredStores.reduce((accumulator,currentStore) => {return accumulator + currentStore.Amount;},0);
         }
 
         //Refresh the child table component
