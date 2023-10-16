@@ -6,7 +6,7 @@ export default class RecordTable extends LightningElement {
     @api colNames;
 
     @track sortedField;
-    @track sortDirection = 'asc';
+    @track sortDirection = 1;
     @track sortedRows;
     @track columns;    
 
@@ -24,38 +24,28 @@ export default class RecordTable extends LightningElement {
 
     @api applyFilter(filteredStores) {
         this.sortedRows = [...filteredStores];
+        this.sortedField = undefined;
+        this.setSortedIcons();
     }
 
     sortColumn(e) {
-        let fieldName = e.target.dataset.type;
-        this.sortedField = fieldName;
-        this.sortDirection = this.sortDirection == 'asc' ? 'desc' : 'asc';
+        this.sortedField = e.target.dataset.type;
+
+        //Reverse the sort order
+        this.sortDirection = this.sortDirection * -1;
 
         //Sort the rows by selected column
         this.sortedRows.sort((a,b) => {
-            if(this.sortDirection == 'asc') {
-                if(a[fieldName] > b[fieldName]) {
-                    return 1;
-                } else if(a[fieldName] < b[fieldName]) {
-                    return -1;
-                } else {
-                    return 0
-                }
-            } else {
-                if(a[fieldName] > b[fieldName]) {
-                    return -1;
-                } else if(a[fieldName] < b[fieldName]) {
-                    return 1;
-                } else {
-                    return 0
-                }
-            }
+            return (a[this.sortedField] > b[this.sortedField] ? 1 :-1) * this.sortDirection;
         });
         
-        //Add sorted column direction indicator
+        this.setSortedIcons();
+    }
+
+    setSortedIcons() {
         this.columns.forEach(col => {
-            col.isSortedAsc = col.name == this.sortedField && this.sortDirection == 'asc';
-            col.isSortedDesc = col.name == this.sortedField && this.sortDirection == 'desc';            
+            col.isSortedAsc = col.name == this.sortedField && this.sortDirection == 1;
+            col.isSortedDesc = col.name == this.sortedField && this.sortDirection == -1;            
         });
     }
 }

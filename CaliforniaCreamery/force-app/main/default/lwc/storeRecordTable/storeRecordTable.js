@@ -28,7 +28,7 @@ export default class StoreRecordTable extends LightningElement {
                 this.filteredStores = this.stores;
                 
                 //Convert the values to list of fields
-                    //This supports iterating over the column values to support dynamic tables
+                    //This enables iterating over the column values to support dynamic tables
                 this.filteredStores.forEach(store=> {
                     store.url = baseUrl + '/' + store.Id;
                     store.fieldValues = [];
@@ -39,7 +39,7 @@ export default class StoreRecordTable extends LightningElement {
 
                 //Add city names to picklist options
                 dataWrapper.GeoInfo.Cities.forEach((cityName) => {
-                    this.cities.push(cityName);                    
+                    this.cities.push(cityName); 
                 });
                 this.cities.sort();
             } else if(error) {
@@ -64,7 +64,8 @@ export default class StoreRecordTable extends LightningElement {
             //Only show total amount when the city filter is applied
             this.showTotalAmount = true;
             this.filteredStores = this.stores.filter((store) => store.City == this.selectedCity);
-            this.totalAmount = this.filteredStores.reduce((accumulator,currentStore) => {return accumulator + currentStore.Amount;},0);
+            this.totalAmount = 
+                    this.filteredStores.reduce((accumulator,currentStore) => {return accumulator + currentStore.Amount;},0);
         }
 
         //Refresh the child table component
